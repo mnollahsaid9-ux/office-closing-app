@@ -2,7 +2,7 @@ services:
   - type: web
     name: office-closing-app
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /health
@@ -16,3 +16,4 @@ databases:
   - name: office-closing-db
     databaseName: office_closing
     user: office_closing
+    plan: free
