@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Office Closing V4</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">💰</div>
+    <h1 id="loginOfficeName">Office Closing</h1>
+    <p>🔐 Mfumo wa kuingia</p>
+    <label for="loginUsername">Username</label>
+    <input id="loginUsername" type="text" autocomplete="username" placeholder="Username">
+    <label for="loginPassword">Password</label>
+    <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password">
+    <button type="button" class="save wide" id="loginBtn">🔓 Ingia</button>
+    <div id="loginMessage"></div>
+    <small>Default Admin: <b>admin</b> / <b>admin123</b></small>
+  </div>
+</section>
+
+<div class="app">
+<header>
+  <h1>💰 Office Closing</h1>
+  <p>Financial Closing System — Version 4</p>
+</header>
+
+
+
+
+<section id="auditSection" class="card hidden">
+  <div class="topline">
+    <h2>🧾 Audit Trail</h2>
+    <div><button type="button" class="secondary" id="exportAuditBtn">⬇️ Export CSV</button><button type="button" class="secondary" id="auditHomeBtn">← Home</button></div>
+  </div>
+  <p>Historia ya vitendo muhimu vya mfumo: nani alifanya, nini kilifanyika, na tarehe/saa.</p>
+  <div class="audit-filters">
+    <select id="auditActionFilter"><option value="">Vitendo vyote</option></select>
+    <select id="auditUserFilter"><option value="">Users wote</option></select>
+    <input id="auditSearch" type="text" placeholder="Tafuta closing no, sababu, user...">
+  </div>
+  <div id="auditList"></div>
+</section>
+
+<section id="approvalSection" class="card hidden">
+  <div class="topline">
+    <h2>🔐 Closing Approvals</h2>
+    <button type="button" class="secondary" id="approvalHomeBtn">← Home</button>
+  </div>
+  <p>Closings zilizohifadhiwa zinafungwa <b>LOCKED 🔒</b>. Admin anaweza ku-review na ku-approve. Approved inaweza kufunguliwa tena kwa sababu maalum.</p>
+  <div id="approvalList"></div>
+</section>
+
+<section id="settingsSection" class="card hidden">
+  <div class="topline">
+    <h2>⚙️ Office Settings</h2>
+    <button type="button" class="secondary" id="settingsHomeBtn">← Home</button>
+  </div>
+
+  <h3>🏢 Taarifa za Ofisi</h3>
+  <div class="meta">
+    <div><label for="officeName">Jina la Ofisi</label><input id="officeName" type="text" placeholder="Mfano: ABC Office"></div>
+    <div><label for="officeBranch">Branch / Location</label><input id="officeBranch" type="text" placeholder="Mfano: Tabora"></div>
+    <div><label for="officePhone">Simu</label><input id="officePhone" type="text" placeholder="Mfano: 07xx xxx xxx"></div>
+  </div>
+  <label for="officeAddress">Anwani</label>
+  <input id="officeAddress" type="text" placeholder="Mfano: P.O. Box ... / Street ...">
+
+  <h3>👤 Cashiers</h3>
+  <p>Weka majina ya cashiers wanaoruhusiwa kufanya closing. Jina litaonekana kama chaguo wakati wa NEW CLOSING.</p>
+  <div id="cashierList"></div>
+  <div class="person-add">
+    <input id="newCashierName" type="text" placeholder="Jina la Cashier">
+    <button type="button" class="secondary" id="addCashier">+ Ongeza Cashier</button>
+  </div>
+
+  
+<h3>👥 Users & Permissions</h3>
+<p><b>Admin:</b> anaweza kuona reports, backup, settings na kusimamia users. <b>Cashier:</b> anaweza kufanya closing lakini hawezi kufungua Settings/Backup.</p>
+<div id="userList"></div>
+<div class="person-add">
+  <input id="newUsername" type="text" placeholder="Username">
+  <input id="newUserPassword" type="password" placeholder="Password">
+  <select id="newUserRole">
+    <option value="cashier">Cashier</option>
+    <option value="admin">Admin</option>
+  </select>
+  <button type="button" class="secondary" id="addUser">+ Ongeza User</button>
+</div>
+
+<button type="button" class="save wide" id="saveSettings">💾 Save Settings</button>
+  <div id="settingsMessage"></div>
+</section>
+
+<section id="dashboard" class="card hidden">
+  <div class="topline">
+    <h2>📊 Dashboard</h2>
+    <button type="button" class="secondary" id="dashboardHomeBtn">← Home</button>
+  </div>
+  <div class="dashgrid">
+    <div class="dashbox"><span>🌅 Today Morning</span><b id="dashMorning">—</b></div>
+    <div class="dashbox"><span>🌆 Today Evening</span><b id="dashEvening">—</b></div>
+    <div class="dashbox"><span>💰 Current Capital</span><b id="dashCapital">—</b></div>
+    <div class="dashbox"><span>🔴 Total Shortage</span><b id="dashShortage">0 TSh</b></div>
+    <div class="dashbox"><span>🟢 Total Surplus</span><b id="dashSurplus">0 TSh</b></div>
+    <div class="dashbox"><span>📋 Number of Closings</span><b id="dashCount">0</b></div>
+  </div>
+  <h3>📅 This Month</h3>
+  <div id="dashMonth" class="monthsummary"></div>
+</section>
+
+
+
+<section id="backupSection" class="card hidden">
+  <div class="topline">
+    <h2>💾 Backup & Restore</h2>
+    <button type="button" class="secondary" id="backupHomeBtn">← Home</button>
+  </div>
+  <div class="backup-box">
+    <h3>🛡️ Automatic Backup</h3>
+    <p>Mfumo unatengeneza snapshot ya data baada ya mabadiliko muhimu. Snapshots 30 za mwisho zinatunzwa kwenye computer hii.</p>
+    <button type="button" class="save wide" id="createBackupNow">💾 Create Backup Now</button>
+    <div id="autoBackupStatus"></div>
+  </div>
+  <hr>
+  <h3>📦 Backup File</h3>
+  <p><b>Download:</b> Pakua backup kamili na uihifadhi kwenye flash/external drive.</p>
+  <button type="button" class="secondary wide" id="exportBackup">⬇️ Download Backup File</button>
+  <hr>
+  <p><b>Restore:</b> Chagua backup file uliyohifadhi awali. Taarifa zilizopo zitachanganywa bila kuacha duplicate.</p>
+  <input id="restoreFile" type="file" accept=".json,application/json">
+  <button type="button" class="secondary wide" id="restoreBackup">♻️ Restore Backup File</button>
+  <hr>
+  <h3>🕒 Local Backup Snapshots</h3>
+  <div id="backupSnapshots"></div>
+  <div id="backupMessage"></div>
+</section>
+
+<section id="monthlyReport" class="card hidden">
+  <div class="topline">
+    <h2>📅 Monthly Report</h2>
+    <button type="button" class="secondary" id="reportHomeBtn">← Home</button>
+  </div>
+  <div class="report-controls">
+    <div>
+      <label for="reportMonth">Chagua Mwezi</label>
+      <input id="reportMonth" type="month">
+    </div>
+    <button type="button" class="secondary" id="refreshReport">🔄 View Report</button>
+    <button type="button" class="secondary" id="printMonthly">🖨️ Print</button>
+  </div>
+  <div class="print-header"><h1>OFFICE CLOSING</h1><div>Monthly Financial Closing Report</div></div><div id="reportSummary" class="report-summary"></div>
+  <div class="table-wrap">
+    <table id="monthlyTable">
+      <thead>
+        <tr>
+          <th>Tarehe</th><th>Morning</th><th>Evening</th><th>Tofauti</th><th>Status</th><th>Details</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="home" class="card home">
+  <div class="topline"><h2>NEW CLOSING</h2><button type="button" class="secondary" id="logoutBtn">🚪 Logout</button><button type="button" class="secondary" id="approvalBtn" style="display:none">🔐 Approvals</button><button type="button" class="secondary" id="dashboardBtn">📊 Dashboard</button><button type="button" class="secondary" id="monthlyBtn">📅 Monthly Report</button><button type="button" class="secondary" id="backupBtn">💾 Backup & Restore</button><button type="button" class="secondary" id="settingsBtn">⚙️ Settings</button></div>
+  <p>Chagua aina ya closing unayotaka kufanya.</p>
+  <div class="choice">
+    <button type="button" id="newMorning">🌅 Morning Closing</button>
+    <button type="button" id="newEvening">🌆 Evening Closing</button>
+  </div>
+  <button type="button" class="secondary wide" id="historyBtn">📋 View History</button>
+  <section id="historyTools" class="history-tools">
+    <input id="historySearch" type="text" placeholder="🔎 Tafuta Closing No, cashier, tarehe...">
+    <select id="historyType">
+      <option value="">Morning + Evening</option>
+      <option value="morning">🌅 Morning</option>
+      <option value="evening">🌆 Evening</option>
+    </select>
+    <select id="historyStatus">
+      <option value="">Status zote</option>
+      <option value="LOCKED">🔒 Locked</option>
+      <option value="APPROVED">✅ Approved</option>
+      <option value="EDIT">✏️ Edit</option>
+    </select>
+    <button type="button" class="secondary" id="clearHistoryFilters">Clear Filters</button>
+  </section>
+
+</section>
+
+<section id="formSection" class="hidden">
+  <section class="card">
+    <div class="topline">
+      <button type="button" class="secondary" id="backBtn">← Back</button>
+      <span id="closingTypeLabel"></span>
+    </div>
+    <h2 id="formTitle">Closing</h2>
+    <div class="meta">
+      <div><label for="date">Tarehe</label><input id="date" type="date"></div>
+      <div><label for="cashier">Jina la Cashier</label><select id="cashier"></select><small>Cashier hayupo? Ongeza kupitia ⚙️ Settings.</small></div>
+      <div><label for="closingNo">Closing Number</label><input id="closingNo" type="text" placeholder="Auto"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>💵 Cash na Float</h2>
+    <div id="accounts" class="accounts"></div>
+    <div class="total">Jumla ya Cash na Float: <b id="total">0</b> TSh</div>
+
+    <h3>+ Madai — Ofisi inadai</h3>
+    <div id="claims"></div>
+    <button type="button" class="secondary" id="addClaim">+ Ongeza mdai</button>
+
+    <h3>- Madaiwa — Ofisi inadaiwa</h3>
+    <div id="debts"></div>
+    <button type="button" class="secondary" id="addDebt">+ Ongeza mdaiwa</button>
+
+    <div class="capital">
+      <span>Mtaji Halisi</span>
+      <strong id="capital">0 TSh</strong>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>📝 Maelezo ya Closing</h2>
+    <label for="notes">Maelezo / Sababu ya tofauti (hiari)</label>
+    <textarea id="notes" rows="4" placeholder="Mfano: Shortage 10,000 — cashier amekosea kutoa change."></textarea>
+  </section>
+
+  <button type="button" class="save" id="saveBtn">💾 Save Closing</button>
+  <div id="message"></div>
+</section>
+
+
+<section id="dailyReport" class="card hidden">
+  <div class="topline no-print">
+    <h2>🖨️ Daily Closing Report</h2>
+    <button type="button" class="secondary" id="dailyReportHome">← Home</button>
+  </div>
+  <div id="dailyReportBody"></div>
+  <div class="report-signatures">
+    <div>Cashier Signature: ____________________</div>
+    <div>Supervisor Signature: ____________________</div>
+  </div>
+  <div class="report-actions no-print">
+    <button type="button" class="save" id="printDaily">🖨️ Print / Save as PDF</button>
+  </div>
+</section>
+
+<section id="comparisonSection" class="card hidden">
+  <h2>📊 Comparison ya Siku</h2>
+  <div id="comparison"></div>
+</section>
+
+
+<section id="closingDetailSection" class="card hidden">
+  <div class="topline">
+    <h2>🔎 Closing Details</h2>
+    <button type="button" class="secondary" id="closingDetailBack">← History</button>
+  </div>
+  <div id="closingDetail"></div>
+</section>
+
+<section id="historySection" class="card hidden">
+  <div class="topline">
+    <h2>📋 History ya Closings</h2>
+    <button type="button" class="secondary" id="homeBtn">← Home</button>
+  </div>
+  <div id="history"></div>
+</section>
+</div>
+<script src="online.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

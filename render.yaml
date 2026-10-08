@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: office-closing-app
+    runtime: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: office-closing-db
+          property: connectionString
+
+databases:
+  - name: office-closing-db
+    databaseName: office_closing
+    user: office_closing
