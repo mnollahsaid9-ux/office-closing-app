@@ -17,7 +17,7 @@ const defaultState = {
   officeClosingApprovals: [],
   officeClosingAudit: [],
   officeClosingUsers: [
-    {username:'admin',password:'admin123',role:'admin'},
+    {username:'',password:'',role:'admin'},
     {username:'cashier',password:'cashier123',role:'cashier'}
   ],
   officeClosingSettings: {officeName:'Office Closing',officeBranch:'',officePhone:'',officeAddress:'',cashiers:[]}
